@@ -4,7 +4,7 @@
         @include('styles.generalstyles')
 </head>
 <body>
-<h1 style="text-align:center;font-family:verdana;">A Phonebook I Know</h1>
+<h1 style="text-align:center;font-family:verdana;"> <i class="fa fa-phone"></i> A Phonebook I Know <i class="fa fa-phone"></i></h1>
 <hr style="color:black">
 
 <form action="<?php echo url('/savecontact')?>" method="post">

@@ -152,7 +152,6 @@ class MainController extends Controller
         ->orWhere('lastname','like','%'.$searchitem.'%')
         ->orWhere('nickname','like','%'.$searchitem.'%')
         ->orWhere('contact','like','%'.$searchitem.'%')
-        ->orWhere('hobbies','like','%'.$searchitem.'%')  
         ->get();
 
         return $searchedcontacts;
