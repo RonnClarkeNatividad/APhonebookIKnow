@@ -19,3 +19,5 @@ Route::post('/savecontact','MainController@saveContact');
 Route::get('/delete/{contact_ID}','MainController@deleteContact');
 Route::get('/edit/{contact_ID}','MainController@editContact');
 Route::post('/editcontact','MainController@saveEditContact');
+Route::post('/searchcontact','MainController@searchContact');
+Route::get('/viewprofile/{contact_ID}','MainController@viewProfile');

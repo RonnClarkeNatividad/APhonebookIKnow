@@ -26,13 +26,23 @@ class MainController extends Controller
         return view('newcontact');
     }
 
+    //saves a contact entry to the database
     public function saveContact(Request $request){
         $generatedID= rand();       
-        $this->addContactToDB($generatedID,$request->name,$request->address,$request->contact);
+        $this->addContactToDB(
+            $generatedID,
+            $request->firstname,
+            $request->lastname,
+            $request->nickname,
+            $request->age,
+            $request->address,
+            $request->contact,
+            $request->hobbies);
 
         return redirect(url('/'));
-;    }
+   }
 
+   //deletes a contact entry from the database
     public function deleteContact($contact_ID){
         $this->deleteContactbyID($contact_ID);
 
@@ -47,9 +57,30 @@ class MainController extends Controller
     }
 
     public function saveEditContact(Request $request){
-        $this->updateContactbyID($request->contact_ID,$request->name,$request->address,$request->contact);
+        $this->updateContactbyID(
+            $request->firstname,
+            $request->lastname,
+            $request->nickname,
+            $request->age,
+            $request->address,
+            $request->contact,
+            $request->hobbies);
         
         return redirect(url('/'));
+    }
+
+    //allows the user to search throughout the database for a matching entry on multiple fields
+    public function searchContact(Request $request){
+        $contactslist = $this->searchContactbyLike($request->search);
+        return view('phonebook')
+        ->with(compact('contactslist'));
+    }
+
+    public function viewProfile($contact_ID){
+        $credentials=$this->getContactbyID($contact_ID);
+
+        return view('profilepage')
+        ->with(compact('credentials'));
     }
 
 
@@ -74,13 +105,17 @@ class MainController extends Controller
     }
 
     //function that saves a contact to DB
-    public function addContactToDB($contact_ID,$name,$address,$contact){
+    public function addContactToDB($contact_ID,$firstname,$lastname,$nickname,$age,$address,$contact,$hobbies){
 
         Contacts::create([
             'contact_ID' => $contact_ID,
-            'name' =>   $name,
+            'firstname' =>   $firstname,
+            'lastname' =>   $lastname,
+            'nickname' =>   $nickname,
+            'age' => $age,
             'address'=> $address,
-            'contact'=> $contact
+            'contact'=> $contact,
+            'hobbies'=> $hobbies
         ]);
 
         return;
@@ -94,15 +129,32 @@ class MainController extends Controller
     }
 
     //function that seeks out a contact ID and updates it
-    public function updateContactbyID($contact_ID,$name,$address,$contact){
+    public function updateContactbyID($contact_ID,$firstname,$lastname,$nickname,$age,$address,$contact,$hobbies){
         Contacts::where('contact_ID',$contact_ID)
         ->update([
             'contact_ID' => $contact_ID,
-            'name' =>   $name,
+            'firstname' =>   $firstname,
+            'lastname' =>   $lastname,
+            'nickname' =>   $nickname,
+            'age' => $age,
             'address'=> $address,
-            'contact'=> $contact
+            'contact'=> $contact,
+            'hobbies'=> $hobbies
         ]);
 
         return;
+    }
+    
+    //function that seeks out a contact that is like the item searched
+    public function searchContactbyLike($searchitem){
+        $searchedcontacts= 
+        Contacts::where('firstname','like','%'.$searchitem.'%')
+        ->orWhere('lastname','like','%'.$searchitem.'%')
+        ->orWhere('nickname','like','%'.$searchitem.'%')
+        ->orWhere('contact','like','%'.$searchitem.'%')
+        ->orWhere('hobbies','like','%'.$searchitem.'%')  
+        ->get();
+
+        return $searchedcontacts;
     }
 }

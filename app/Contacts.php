@@ -17,7 +17,7 @@ class Contacts extends Model
      * @var array
      */
     protected $fillable = [
-        'contact_ID','name','address','contact'
+        'contact_ID','firstname','lastname','nickname','age','address','contact','hobbies'
     ];
 
     /**
@@ -26,6 +26,6 @@ class Contacts extends Model
      * @var array
      */
     protected $hidden = [
-        'contact_ID','name','address','contact'
+        'contact_ID','firstname','lastname','nickname','age','address','contact','hobbies'
     ];
 }
